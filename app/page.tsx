@@ -58,49 +58,16 @@ let array = [0, -24, -48, -72, -96, -120, 96, 72, 48, 24];
 function Digit({ mv, digit }: { mv: MotionValue; digit: number }) {
   // let y = useTransform(mv, (v) => ((v * -24) % 216) + digit * 24);
   let y = useTransform(mv, (v) => {
+    let height = 24;
     let lastDigitOfMv = v % 10;
-    // let x1 = (digit + lastDigitOfMv) % 10;
+    // WORKS
     let x1 = (lastDigitOfMv + 10 - digit) % 10;
-    let x2 = -24;
+    let x2 = -height;
     let f1 = x1 * x2;
-    let x3 = x1 > 5 ? 240 : 0;
+    let x3 = x1 > 5 ? 10 * height : 0;
     let f2 = f1 + x3;
 
     return f2;
-
-    // let firstCol = lastDigitOfMv * -24;
-    // let secondCol = lastDigitOfMv > 5 ? 240 : 0;
-
-    // return firstCol + secondCol;
-    return array[lastDigitOfMv];
-    // let shouldReposition = digit > lastDigitOfMv && lastDigitOfMv > 6;
-
-    // return shouldReposition ? firstCol - 240 : firstCol;
-    // let lastDigit = v % 10;
-    // let ytemp = 24 * lastDigit;
-    // if (lastDigit > 5) {
-    //   ytemp -= 240;
-    // }
-
-    // ytemp += 24 * digit;
-
-    // return ytemp;
-
-    // let lastDigit = v % 10;
-    // let y = ((v * -24) % 216) + digit * 24;
-    // // console.log(digit - lastDigit);
-    // let dif = Math.abs(digit - lastDigit);
-    // if (dif >= 5) {
-    //   // y -= 24 * dif;
-    //   y -= 240;
-    // }
-    // if (digit - lastDigit > 4) {
-    //   y += 216;
-    // } else if (digit - lastDigit < -4) {
-    //   y -= 216;
-    // }
-
-    return y;
   });
 
   return (
