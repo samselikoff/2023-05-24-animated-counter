@@ -56,18 +56,18 @@ function Counter({ value }: { value: number }) {
 let array = [0, -24, -48, -72, -96, -120, 96, 72, 48, 24];
 
 function Digit({ mv, digit }: { mv: MotionValue; digit: number }) {
-  // let y = useTransform(mv, (v) => ((v * -24) % 216) + digit * 24);
   let y = useTransform(mv, (v) => {
     let height = 24;
     let lastDigitOfMv = v % 10;
-    // WORKS
-    let x1 = (lastDigitOfMv + 10 - digit) % 10;
-    let x2 = -height;
-    let f1 = x1 * x2;
-    let x3 = x1 > 5 ? 10 * height : 0;
-    let f2 = f1 + x3;
 
-    return f2;
+    let offset = (lastDigitOfMv + 10 - digit) % 10;
+    let y = -offset * height;
+
+    if (offset > 5) {
+      y += 10 * height;
+    }
+
+    return y;
   });
 
   return (
