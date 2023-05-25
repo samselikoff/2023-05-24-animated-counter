@@ -118,14 +118,3 @@ Update placeValue
 ```tsx
 let placeValue = (latest / place) % 10;
 ```
-
-## final
-
-```tsx
-let offset = (digit - lastDigitOfMv + 10) % 10;
-let y = offset * height;
-
-if (offset > 5) {
-  y -= 10 * height;
-}
-```
