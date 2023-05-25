@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { MotionValue, motion, useSpring, useTransform } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   let [count, setCount] = useState(0);
@@ -29,9 +30,58 @@ export default function Home() {
 }
 
 function Counter({ value }: { value: number }) {
+  let animatedValue = useSpring(value);
+  useEffect(() => {
+    animatedValue.set(value);
+  }, [animatedValue, value]);
+
   return (
     <div className="flex h-6 ring-2 ring-red-500">
-      <div className="relative w-6">{value}</div>
+      <div className="relative w-6">
+        {[...Array(10).keys()].map((i) => (
+          <Number place={100} mv={animatedValue} number={i} key={i} />
+        ))}
+      </div>
+      <div className="relative w-6">
+        {[...Array(10).keys()].map((i) => (
+          <Number place={10} mv={animatedValue} number={i} key={i} />
+        ))}
+      </div>
+      <div className="relative w-6">
+        {[...Array(10).keys()].map((i) => (
+          <Number place={1} mv={animatedValue} number={i} key={i} />
+        ))}
+      </div>
     </div>
+  );
+}
+
+function Number({
+  place,
+  mv,
+  number,
+}: {
+  place: number;
+  mv: MotionValue;
+  number: number;
+}) {
+  let y = useTransform(mv, (latest) => {
+    let height = 24;
+    let placeValue = (latest / place) % 10;
+    let offset = (10 + number - placeValue) % 10;
+
+    let memo = offset * height;
+
+    if (offset > 5) {
+      memo -= 10 * height;
+    }
+
+    return memo;
+  });
+
+  return (
+    <motion.span style={{ y }} className="absolute inset-0 flex justify-center">
+      {number}
+    </motion.span>
   );
 }

@@ -84,7 +84,7 @@ function Counter({ value }: { value: number }) {
   }, [animatedValue, value]);
 
   return (
-    <div className="flex h-6 w-12 overflow-hidden ring-2 ring-red-500">
+    <div className="flex h-6 w-12 ring-2 ring-red-500">
       <div className="relative w-6">
         {[...Array(10).keys()].map((digit) => (
           <Digit mv={newAnimatedValue} key={digit} digit={digit} />
@@ -104,11 +104,11 @@ function Digit({ mv, digit }: { mv: MotionValue; digit: number }) {
     let height = 24;
     let lastDigitOfMv = v % 10;
 
-    let offset = (lastDigitOfMv + 10 - digit) % 10;
-    let y = -offset * height;
+    let offset = (digit - lastDigitOfMv + 10) % 10;
+    let y = offset * height;
 
     if (offset > 5) {
-      y += 10 * height;
+      y -= 10 * height;
     }
 
     return y;
