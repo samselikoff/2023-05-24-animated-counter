@@ -6,6 +6,7 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
+  useSpring,
   useTransform,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -16,14 +17,23 @@ export default function Home() {
   return (
     <div className="flex p-20">
       <div className="w-1/2">
-        <p>Count: {count}</p>
         <div className="mt-8">
           <Counter value={count} />
         </div>
       </div>
       <div className="w-1/2">
         <div className="flex-col">
-          <button onClick={() => setCount(0)} className="block w-full border">
+          <p>Count: {count}</p>
+          <div className="mt-4">
+            <input
+              type="number"
+              value={count}
+              onChange={(e) => setCount(+e.target.value)}
+              name=""
+              id=""
+            />
+          </div>
+          {/* <button onClick={() => setCount(0)} className="block w-full border">
             Set to 0
           </button>
           <button onClick={() => setCount(1)} className="block w-full border">
@@ -49,7 +59,7 @@ export default function Home() {
             className="block w-full border"
           >
             Set to 1000
-          </button>
+          </button> */}
         </div>
         {/* <input
           type="range"
@@ -66,26 +76,21 @@ export default function Home() {
 }
 
 function Counter({ value }: { value: number }) {
-  let animatedValue = useMotionValue(value);
+  let animatedValue = useSpring(value);
   let newAnimatedValue = useTransform(animatedValue, (v) => v / 10);
 
   useEffect(() => {
-    // animate(animatedValue, value, { ease: "linear", duration: 5 });
-    animate(animatedValue, value, {
-      type: "spring",
-      bounce: 0,
-      duration: 1.5,
-    });
+    animatedValue.set(value);
   }, [animatedValue, value]);
 
   return (
     <div className="flex h-6 w-12 overflow-hidden ring-2 ring-red-500">
-      <div className="relative w-1/2">
+      <div className="relative w-6">
         {[...Array(10).keys()].map((digit) => (
           <Digit mv={newAnimatedValue} key={digit} digit={digit} />
         ))}
       </div>
-      <div className="relative w-1/2">
+      <div className="relative w-6">
         {[...Array(10).keys()].map((digit) => (
           <Digit mv={animatedValue} key={digit} digit={digit} />
         ))}
