@@ -30,34 +30,50 @@ export default function Home() {
 
 function Counter({ value }: { value: number }) {
   let animatedValue = useSpring(value);
-  let newAnimatedValue = useTransform(animatedValue, (v) => v / 10);
 
   useEffect(() => {
     animatedValue.set(value);
   }, [animatedValue, value]);
 
   return (
-    <div className="flex h-6 w-12 overflow-hidden ring-2 ring-red-500">
+    <div className="flex h-6 ring-2 ring-red-500">
       <div className="relative w-6">
-        {[...Array(10).keys()].map((digit) => (
-          <Digit mv={newAnimatedValue} key={digit} digit={digit} />
-        ))}
+        <Digit place={100} animatedValue={animatedValue} />
       </div>
       <div className="relative w-6">
-        {[...Array(10).keys()].map((digit) => (
-          <Digit mv={animatedValue} key={digit} digit={digit} />
-        ))}
+        <Digit place={10} animatedValue={animatedValue} />
+      </div>
+      <div className="relative w-6">
+        <Digit place={1} animatedValue={animatedValue} />
       </div>
     </div>
   );
 }
 
-function Digit({ mv, digit }: { mv: MotionValue; digit: number }) {
+function Digit({
+  animatedValue,
+  place,
+}: {
+  animatedValue: MotionValue;
+  place: number;
+}) {
+  let mv = useTransform(animatedValue, (v) => v / place);
+
+  return (
+    <>
+      {[...Array(10).keys()].map((number) => (
+        <Number mv={mv} key={number} number={number} />
+      ))}
+    </>
+  );
+}
+
+function Number({ mv, number }: { mv: MotionValue; number: number }) {
   let y = useTransform(mv, (v) => {
     let height = 24;
     let lastDigitOfMv = v % 10;
 
-    let offset = (lastDigitOfMv + 10 - digit) % 10;
+    let offset = (lastDigitOfMv + 10 - number) % 10;
     let y = -offset * height;
 
     if (offset > 5) {
@@ -69,7 +85,7 @@ function Digit({ mv, digit }: { mv: MotionValue; digit: number }) {
 
   return (
     <motion.div style={{ y }} className="absolute inset-0 flex justify-center">
-      <span>{digit}</span>
+      <span>{number}</span>
     </motion.div>
   );
 }

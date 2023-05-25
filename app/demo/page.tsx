@@ -30,46 +30,18 @@ export default function Home() {
 
 function Counter({ value }: { value: number }) {
   let animatedValue = useSpring(value);
-  let newAnimatedValue = useTransform(animatedValue, (v) => v / 10);
 
   useEffect(() => {
     animatedValue.set(value);
   }, [animatedValue, value]);
 
   return (
-    <div className="flex h-6 w-12 overflow-hidden ring-2 ring-red-500">
-      <div className="relative w-6">
-        {[...Array(10).keys()].map((digit) => (
-          <Digit mv={newAnimatedValue} key={digit} digit={digit} />
-        ))}
-      </div>
-      <div className="relative w-6">
-        {[...Array(10).keys()].map((digit) => (
-          <Digit mv={animatedValue} key={digit} digit={digit} />
-        ))}
-      </div>
+    <div className="flex h-6 ring-2 ring-red-500">
+      <div className="relative w-6">1</div>
     </div>
   );
 }
 
-function Digit({ mv, digit }: { mv: MotionValue; digit: number }) {
-  let y = useTransform(mv, (v) => {
-    let height = 24;
-    let lastDigitOfMv = v % 10;
-
-    let offset = (lastDigitOfMv + 10 - digit) % 10;
-    let y = -offset * height;
-
-    if (offset > 5) {
-      y += 10 * height;
-    }
-
-    return y;
-  });
-
-  return (
-    <motion.div style={{ y }} className="absolute inset-0 flex justify-center">
-      <span>{digit}</span>
-    </motion.div>
-  );
+function Digit() {
+  return <div className="absolute inset-0 flex justify-center">1</div>;
 }
