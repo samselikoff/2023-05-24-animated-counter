@@ -1,7 +1,6 @@
 "use client";
 
-import { MotionValue, motion, useSpring, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   let [count, setCount] = useState(0);
@@ -15,6 +14,7 @@ export default function Home() {
             <input
               type="number"
               value={count}
+              min={0}
               onChange={(e) => setCount(+e.target.value)}
               className="w-20 p-1"
             />
@@ -29,19 +29,9 @@ export default function Home() {
 }
 
 function Counter({ value }: { value: number }) {
-  let animatedValue = useSpring(value);
-
-  useEffect(() => {
-    animatedValue.set(value);
-  }, [animatedValue, value]);
-
   return (
     <div className="flex h-6 ring-2 ring-red-500">
-      <div className="relative w-6">1</div>
+      <div className="relative w-6">{value}</div>
     </div>
   );
-}
-
-function Digit() {
-  return <div className="absolute inset-0 flex justify-center">1</div>;
 }
